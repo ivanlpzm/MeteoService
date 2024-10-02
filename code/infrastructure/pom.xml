@@ -15,10 +15,9 @@
     <description>Infrastructure layer for MeteoService</description>
 
     <dependencies>
-        <!-- Include the application module for implementing use cases -->
         <dependency>
             <groupId>com.smoke.meteoservice</groupId>
-            <artifactId>application</artifactId>
+            <artifactId>domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
 
@@ -47,6 +46,10 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework</groupId>
+            <artifactId>spring-web</artifactId>
         </dependency>
     </dependencies>
 </project>

@@ -1,5 +1,5 @@
 
-package com.smoke.meteoservice.model;
+package com.smoke.meteoservice.domain.model;
 
 import lombok.Data;
 import org.springframework.data.annotation.Id;

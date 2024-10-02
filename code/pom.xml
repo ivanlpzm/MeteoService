@@ -28,7 +28,6 @@
         <module>domain</module>
         <module>infrastructure</module>
         <module>adapter</module>
-        <module>controller</module>
     </modules>
 
     <dependencyManagement>

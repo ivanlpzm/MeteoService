@@ -1,5 +1,5 @@
 
-package com.smoke.meteoservice.api.response;
+package com.smoke.meteoservice.adapter.in.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
