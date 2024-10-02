@@ -35,6 +35,7 @@ public class WeatherUseCaseImpl implements WeatherUseCase {
         data.setLatitude(latitude);
         data.setLongitude(longitude);
         data.setTemperature(temperature);
+        data.setTimestamp(LocalDateTime.now());
 
         kafkaProducerService.sendMessage(data);
         return mongoWeatherRepository.save(data);

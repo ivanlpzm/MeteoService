@@ -6,6 +6,6 @@ db.temperatureData.createIndex(
 );
 
 db.temperatureData.createIndex(
-  { createdAt: 1 },
+  { timestamp: 1 },
   { expireAfterSeconds: 60 } 
 );
