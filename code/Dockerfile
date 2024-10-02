@@ -6,7 +6,7 @@ FROM openjdk:17-jdk-slim
 WORKDIR /app
 
 # Copy the current directory contents into the container at /app
-COPY target/meteoservice-0.0.1-SNAPSHOT.jar app.jar
+COPY boot/target/boot-0.0.1-SNAPSHOT.jar /app.jar
 
 # Run the jar file
-ENTRYPOINT ["java", "-jar", "/app/app.jar"]
+ENTRYPOINT ["java", "-jar", "/app.jar"]

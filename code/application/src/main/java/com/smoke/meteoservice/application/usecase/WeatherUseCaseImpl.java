@@ -1,8 +1,8 @@
-package com.smoke.meteoservice.application.service;
+package com.smoke.meteoservice.application.usecase;
 
 import com.smoke.meteoservice.domain.model.TemperatureData;
 import com.smoke.meteoservice.domain.port.in.WeatherUseCase;
-import com.smoke.meteoservice.domain.port.out.WeatherApi;
+import com.smoke.meteoservice.domain.port.out.MeteoApi;
 import com.smoke.meteoservice.domain.port.out.WeatherRepository;
 import org.springframework.stereotype.Service;
 
@@ -10,24 +10,24 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 @Service
-public class WeatherService implements WeatherUseCase {
+public class WeatherUseCaseImpl implements WeatherUseCase {
     private final WeatherRepository weatherRepository;
-    private final WeatherApi weatherApi;
+    private final MeteoApi meteoApi;
 
-    public WeatherService(WeatherRepository weatherRepository, WeatherApi weatherApi) {
+    public WeatherUseCaseImpl(WeatherRepository weatherRepository, MeteoApi meteoApi) {
         this.weatherRepository = weatherRepository;
-        this.weatherApi = weatherApi;
+        this.meteoApi = meteoApi;
     }
 
     @Override
     public TemperatureData getTemperature(double latitude, double longitude) {
         Optional<TemperatureData> cachedData = weatherRepository.findByLatitudeAndLongitude(latitude, longitude);
 
-        if (cachedData.isPresent() && cachedData.get().getTimestamp().isAfter(LocalDateTime.now().minusMinutes(1))) {
+        if (cachedData.isPresent()) {
             return cachedData.get();
         }
 
-        double temperature = weatherApi.fetchTemperature(latitude, longitude);
+        double temperature = meteoApi.fetchTemperature(latitude, longitude);
         TemperatureData data = new TemperatureData();
         data.setLatitude(latitude);
         data.setLongitude(longitude);

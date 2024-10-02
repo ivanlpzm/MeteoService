@@ -10,6 +10,7 @@ import java.time.LocalDateTime;
 @Data
 @Document(collection = "temperatureData")
 public class TemperatureData {
+    
     @Id
     private String id;
 

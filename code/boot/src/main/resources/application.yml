@@ -1,7 +1,7 @@
 spring:
   data:
     mongodb:
-      uri: mongodb://localhost:27017/meteo
+      uri: mongodb://localhost:27017/meteoservice
   kafka:
     bootstrap-servers: localhost:9092
 server:
@@ -12,3 +12,6 @@ kafka:
 openmeteo:
   api:
     url: https://api.open-meteo.com/v1/forecast
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html

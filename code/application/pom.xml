@@ -26,6 +26,10 @@
             <artifactId>domain</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>org.springdoc</groupId>
+            <artifactId>springdoc-openapi-ui</artifactId>
+        </dependency>
         <!-- Unit Testing Dependencies -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
