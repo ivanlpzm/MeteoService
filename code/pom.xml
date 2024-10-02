@@ -55,8 +55,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.22</version>
-                <scope>provided</scope>
+                <version>1.18.30</version>
             </dependency>
             <dependency>
                 <groupId>org.json</groupId>
@@ -71,4 +70,15 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
+    <build>
+        <finalName>${project.artifactId}-${project.version}</finalName>
+        <pluginManagement>
+            <plugins>
+                <plugin>
+                    <groupId>org.springframework.boot</groupId>
+                    <artifactId>spring-boot-maven-plugin</artifactId>
+                </plugin>
+            </plugins>
+        </pluginManagement>
+    </build>
 </project>
