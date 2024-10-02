@@ -1,6 +1,6 @@
 package com.smoke.meteoservice.infrastructure.api;
 
-import com.smoke.meteoservice.domain.port.out.MeteoApi;
+import com.smoke.meteoservice.domain.port.out.api.OpenMeteoApi;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class OpenMeteoApiAdapter implements MeteoApi {
+public class OpenMeteoApiImpl implements OpenMeteoApi {
 
     public static final String CURRENT_WEATHER = "current_weather";
     public static final String TEMPERATURE = "temperature";
@@ -20,6 +20,7 @@ public class OpenMeteoApiAdapter implements MeteoApi {
     public double fetchTemperature(double latitude, double longitude) {
         RestTemplate restTemplate = new RestTemplate();
         String url = String.format("%s?latitude=%f&longitude=%f&current_weather=true", apiUrl, latitude, longitude);
+        
         String response = restTemplate.getForObject(url, String.class);
         
         JSONArray jsonArray = new JSONArray(response);
