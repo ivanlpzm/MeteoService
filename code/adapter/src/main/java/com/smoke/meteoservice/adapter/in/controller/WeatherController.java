@@ -1,8 +1,7 @@
 package com.smoke.meteoservice.adapter.in.controller;
 
 import com.smoke.meteoservice.adapter.in.api.WeatherApi;
-import com.smoke.meteoservice.adapter.in.response.TemperatureResponse;
-import com.smoke.meteoservice.domain.model.TemperatureData;
+import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
 import com.smoke.meteoservice.domain.port.in.WeatherUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -18,8 +17,7 @@ public class WeatherController implements WeatherApi {
 
     @Override
     public ResponseEntity<TemperatureResponse> getTemperature(double latitude, double longitude) {
-        TemperatureData data = weatherUseCase.getTemperature(latitude, longitude);
-        TemperatureResponse temperatureResponse = new TemperatureResponse(data.getLatitude(), data.getLongitude(), data.getTemperature());
+        TemperatureResponse temperatureResponse = weatherUseCase.getTemperature(latitude, longitude);
         return new ResponseEntity<>(temperatureResponse, HttpStatus.OK);
     }
 

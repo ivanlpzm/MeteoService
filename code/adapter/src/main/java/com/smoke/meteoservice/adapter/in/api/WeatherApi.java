@@ -1,6 +1,6 @@
 package com.smoke.meteoservice.adapter.in.api;
 
-import com.smoke.meteoservice.adapter.in.response.TemperatureResponse;
+import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
 import com.smoke.meteoservice.adapter.in.validator.ValidLatitude;
 import com.smoke.meteoservice.adapter.in.validator.ValidLongitude;
 import io.swagger.v3.oas.annotations.Operation;

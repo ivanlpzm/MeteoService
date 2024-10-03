@@ -1,7 +1,7 @@
 
 package com.smoke.meteoservice.domain.port.out.repository;
 
-import com.smoke.meteoservice.domain.model.TemperatureData;
+import com.smoke.meteoservice.domain.model.data.TemperatureData;
 
 import java.util.Optional;
 

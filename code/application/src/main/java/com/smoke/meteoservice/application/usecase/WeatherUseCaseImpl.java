@@ -1,17 +1,17 @@
 package com.smoke.meteoservice.application.usecase;
 
-import com.smoke.meteoservice.domain.model.TemperatureData;
+import com.smoke.meteoservice.domain.model.data.TemperatureData;
+import com.smoke.meteoservice.domain.model.kafka.KafkaTemperatureMessage;
+import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
 import com.smoke.meteoservice.domain.port.in.WeatherUseCase;
 import com.smoke.meteoservice.domain.port.out.api.OpenMeteoApi;
 import com.smoke.meteoservice.domain.port.out.kafka.KafkaProducerService;
 import com.smoke.meteoservice.domain.port.out.repository.MongoWeatherRepository;
 import org.springframework.stereotype.Service;
 
-import java.time.LocalDateTime;
-import java.util.Optional;
-
 @Service
 public class WeatherUseCaseImpl implements WeatherUseCase {
+
     private final MongoWeatherRepository mongoWeatherRepository;
     private final OpenMeteoApi openMeteoApi;
     private final KafkaProducerService kafkaProducerService;
@@ -23,23 +23,12 @@ public class WeatherUseCaseImpl implements WeatherUseCase {
     }
 
     @Override
-    public TemperatureData getTemperature(double latitude, double longitude) {
-        Optional<TemperatureData> cachedData = mongoWeatherRepository.findByLatitudeAndLongitude(latitude, longitude);
+    public TemperatureResponse getTemperature(double latitude, double longitude) {
+        TemperatureData data = mongoWeatherRepository.findByLatitudeAndLongitude(latitude, longitude)
+                .orElseGet(() -> fetchAndSaveTemperature(latitude, longitude));
 
-        if (cachedData.isPresent()) {
-            return cachedData.get();
-        }
-
-        double temperature = openMeteoApi.fetchTemperature(latitude, longitude);
-        TemperatureData data = new TemperatureData();
-        data.setLatitude(latitude);
-        data.setLongitude(longitude);
-        data.setTemperature(temperature);
-        data.setTimestamp(LocalDateTime.now());
-
-        kafkaProducerService.sendMessage(data);
-        
-        return mongoWeatherRepository.save(data);
+        sendWeatherMessageToKafka(data);
+        return new TemperatureResponse(data.getLatitude(), data.getLongitude(), data.getTemperature());
     }
 
     @Override
@@ -48,4 +37,14 @@ public class WeatherUseCaseImpl implements WeatherUseCase {
                 .ifPresent(mongoWeatherRepository::delete);
     }
 
+    private TemperatureData fetchAndSaveTemperature(double latitude, double longitude) {
+        double temperature = openMeteoApi.fetchTemperature(latitude, longitude);
+        TemperatureData data = new TemperatureData(latitude, longitude, temperature);
+        return mongoWeatherRepository.save(data);
+    }
+
+    private void sendWeatherMessageToKafka(TemperatureData data) {
+        KafkaTemperatureMessage kafkaMessage = new KafkaTemperatureMessage(data.getLatitude(), data.getLongitude(), data.getTemperature());
+        kafkaProducerService.sendMessage(kafkaMessage);
+    }
 }

@@ -1,10 +1,10 @@
 
 package com.smoke.meteoservice.domain.port.in;
 
-import com.smoke.meteoservice.domain.model.TemperatureData;
+import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
 
 public interface WeatherUseCase {
-    TemperatureData getTemperature(double latitude, double longitude);
+    TemperatureResponse getTemperature(double latitude, double longitude);
 
     void deleteTemperature(double latitude, double longitude);
 }
