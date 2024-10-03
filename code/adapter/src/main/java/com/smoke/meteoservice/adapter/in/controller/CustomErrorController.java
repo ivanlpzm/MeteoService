@@ -1,7 +1,6 @@
 package com.smoke.meteoservice.adapter.in.controller;
 
 import org.springframework.boot.web.servlet.error.ErrorController;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import javax.servlet.http.HttpServletRequest;
@@ -16,6 +15,6 @@ public class CustomErrorController implements ErrorController {
         if (statusCode != null && statusCode.equals(HTTP_NOT_FOUND)) {
             return "error/404";
         }
-        return "error/error"; 
+        return "error/error";
     }
 }
