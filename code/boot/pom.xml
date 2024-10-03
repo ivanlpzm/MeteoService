@@ -10,19 +10,30 @@
         <relativePath>../pom.xml</relativePath>
     </parent>
 
-
     <artifactId>boot</artifactId>
     <name>${project.groupId}:${project.artifactId}</name>
     <description>Boot module for MeteoService</description>
 
     <dependencies>
-        <!-- Spring Boot Starter Web (needed for running a web application) -->
+        <dependency>
+            <groupId>com.smoke.meteoservice</groupId>
+            <artifactId>application</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.smoke.meteoservice</groupId>
+            <artifactId>infrastructure</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.smoke.meteoservice</groupId>
+            <artifactId>adapter</artifactId>
+            <version>${parent.version}</version>
+        </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-web</artifactId>
         </dependency>
-
-        <!-- Swagger dependencies -->
         <dependency>
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-ui</artifactId>
@@ -31,36 +42,19 @@
             <groupId>org.springframework.kafka</groupId>
             <artifactId>spring-kafka</artifactId>
         </dependency>
-        <!-- Test dependencies -->
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
             <scope>test</scope>
         </dependency>
-
-        <!-- Include other modules as dependencies to access their functionalities -->
-        <dependency>
-            <groupId>com.smoke.meteoservice</groupId>
-            <artifactId>application</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.smoke.meteoservice</groupId>
-            <artifactId>infrastructure</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
-        <dependency>
-            <groupId>com.smoke.meteoservice</groupId>
-            <artifactId>adapter</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-        </dependency>
     </dependencies>
+
     <build>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
-                <version>2.7.5</version>
                 <executions>
                     <execution>
                         <goals>
@@ -68,14 +62,6 @@
                         </goals>
                     </execution>
                 </executions>
-                <configuration>
-                    <archive>
-                        <manifest>
-                            <addClasspath>true</addClasspath>
-                            <mainClass>com.smoke.meteoservice.MeteoServiceApplication</mainClass>
-                        </manifest>
-                    </archive>
-                </configuration>
             </plugin>
         </plugins>
     </build>
