@@ -33,10 +33,12 @@
         <dependency>
             <groupId>org.hibernate.validator</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>6.2.3.Final</version> <!-- Asegúrate de tener una versión actualizada -->
+            <version>6.2.3.Final</version>
         </dependency>
-
-
+        <dependency>
+            <groupId>io.github.resilience4j</groupId>
+            <artifactId>resilience4j-spring-boot2</artifactId>
+        </dependency>
         <!-- Lombok for reducing boilerplate code (optional) -->
         <dependency>
             <groupId>org.projectlombok</groupId>

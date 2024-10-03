@@ -1,6 +1,6 @@
 package com.smoke.meteoservice.adapter.in.controller;
 
-import com.smoke.meteoservice.adapter.in.api.WeatherApi;
+import com.smoke.meteoservice.adapter.in.api.TemperatureApi;
 import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
 import com.smoke.meteoservice.domain.port.in.TemperatureUseCase;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
-public class WeatherController implements WeatherApi {
+public class TemperatureController implements TemperatureApi {
 
     @Autowired
     private TemperatureUseCase temperatureUseCase;

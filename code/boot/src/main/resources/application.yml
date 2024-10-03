@@ -15,4 +15,12 @@ openmeteo:
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
+resilience4j:
+  ratelimiter:
+    instances:
+      temperatureController:
+        limitForPeriod: 10 # Número máximo de solicitudes permitidas por segundo
+        limitRefreshPeriod: 1s # Periodo de actualización del límite
+        timeoutDuration: 500ms # Tiempo máximo de espera para la siguiente solicitud
+
     

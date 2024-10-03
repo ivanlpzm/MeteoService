@@ -9,6 +9,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,8 +19,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 @Validated
 @RequestMapping("/temperature")
-@Tag(name = "Weather Controller", description = "API for weather data")
-public interface WeatherApi {
+@Tag(name = "Temperature Controller", description = "API for temperature data")
+public interface TemperatureApi {
 
     @Operation(summary = "Get temperature by latitude and longitude", description = "Fetches the current temperature data for the given coordinates.")
     @ApiResponses(value = {
@@ -28,6 +29,7 @@ public interface WeatherApi {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
     })
+    @RateLimiter(name = "temperatureController")
     @GetMapping
     ResponseEntity<TemperatureResponse> getTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
 
@@ -37,6 +39,7 @@ public interface WeatherApi {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
     })
+    @RateLimiter(name = "temperatureController")
     @DeleteMapping
     ResponseEntity<Void> deleteTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
 }

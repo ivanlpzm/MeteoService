@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.anyDouble;
 import static org.mockito.Mockito.*;
 
-class WeatherControllerTest {
+class TemperatureControllerTest {
 
     private static final double LATITUDE = 40.0;
     private static final double LONGITUDE = -3.0;
@@ -25,7 +25,7 @@ class WeatherControllerTest {
     private TemperatureUseCase temperatureUseCase;
 
     @InjectMocks
-    private WeatherController weatherController;
+    private TemperatureController temperatureController;
 
     @BeforeEach
     void setUp() {
@@ -38,7 +38,7 @@ class WeatherControllerTest {
         TemperatureResponse mockResponse = new TemperatureResponse(LATITUDE, LONGITUDE, TEMPERATURE);
         when(temperatureUseCase.getTemperature(anyDouble(), anyDouble())).thenReturn(mockResponse);
 
-        ResponseEntity<TemperatureResponse> response = weatherController.getTemperature(LATITUDE, LONGITUDE);
+        ResponseEntity<TemperatureResponse> response = temperatureController.getTemperature(LATITUDE, LONGITUDE);
 
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(mockResponse, response.getBody());
@@ -50,7 +50,7 @@ class WeatherControllerTest {
     void deleteTemperature_shouldReturnNoContent() {
         doNothing().when(temperatureUseCase).deleteTemperature(anyDouble(), anyDouble());
 
-        ResponseEntity<Void> response = weatherController.deleteTemperature(LATITUDE, LONGITUDE);
+        ResponseEntity<Void> response = temperatureController.deleteTemperature(LATITUDE, LONGITUDE);
 
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(temperatureUseCase, times(1)).deleteTemperature(LATITUDE, LONGITUDE);

@@ -1,5 +1,6 @@
 package com.smoke.meteoservice.exception;
 
+import io.github.resilience4j.ratelimiter.RequestNotPermitted;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -19,6 +20,7 @@ public class GlobalExceptionHandler {
     private static final String ERROR_MESSAGE_NOT_FOUND = "The resource you are looking for was not found.";
     private static final String ERROR_MESSAGE_INTERNAL_SERVER = "An unexpected error occurred. Please try again later.";
     private static final String ERROR_MESSAGE_VALIDATION_FAILED = "Validation failed for constraint violations.";
+    private static final String ERROR_RATE_LIMIT = "Too many requests. Please try again later.";
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
@@ -42,6 +44,14 @@ public class GlobalExceptionHandler {
             errors.put(violation.getPropertyPath().toString(), violation.getMessage());
         }
         return buildErrorResponse(ERROR_MESSAGE_VALIDATION_FAILED, errors, HttpStatus.BAD_REQUEST);
+    }
+
+    @ResponseStatus(HttpStatus.TOO_MANY_REQUESTS)
+    @ExceptionHandler(RequestNotPermitted.class)
+    public ResponseEntity<Map<String, Object>> handleRateLimitException(RequestNotPermitted ex) {
+        Map<String, String> errors = new HashMap<>();
+        errors.put("error", ex.getMessage());
+        return buildErrorResponse(ERROR_RATE_LIMIT, errors, HttpStatus.TOO_MANY_REQUESTS);
     }
 
     private ResponseEntity<Map<String, Object>> buildErrorResponse(String errorMessage, Map<String, String> errors, HttpStatus status) {

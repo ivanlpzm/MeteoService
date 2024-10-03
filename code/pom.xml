@@ -25,7 +25,8 @@
         <lombok.version>1.18.30</lombok.version>
         <json.version>20231013</json.version>
         <okhttp.version>4.9.3</okhttp.version>
-        <spring.boot.version>2.7.0</spring.boot.version>
+        <spring.boot.version>2.7.18</spring.boot.version>
+        <resilience4j-spring-boot2.version>2.0.2</resilience4j-spring-boot2.version>
     </properties>
 
     <modules>
@@ -77,6 +78,11 @@
                 <groupId>com.squareup.okhttp3</groupId>
                 <artifactId>logging-interceptor</artifactId>
                 <version>${okhttp.version}</version>
+            </dependency>
+            <dependency>
+                <groupId>io.github.resilience4j</groupId>
+                <artifactId>resilience4j-spring-boot2</artifactId>
+                <version>${resilience4j-spring-boot2.version}</version>
             </dependency>
             <dependency>
                 <groupId>org.springframework.boot</groupId>
