@@ -1,6 +1,8 @@
 package com.smoke.meteoservice.adapter.in.api;
 
 import com.smoke.meteoservice.adapter.in.response.TemperatureResponse;
+import com.smoke.meteoservice.adapter.in.validator.ValidLatitude;
+import com.smoke.meteoservice.adapter.in.validator.ValidLongitude;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
@@ -8,11 +10,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+@Validated
 @RequestMapping("/temperature")
 @Tag(name = "Weather Controller", description = "API for weather data")
 public interface WeatherApi {
@@ -25,7 +29,7 @@ public interface WeatherApi {
             @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
     })
     @GetMapping
-    TemperatureResponse getTemperature(@RequestParam double latitude, @RequestParam double longitude);
+    ResponseEntity<TemperatureResponse> getTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
 
     @Operation(summary = "Delete temperature data", description = "Deletes the temperature data for the given coordinates.")
     @ApiResponses(value = {
@@ -34,5 +38,5 @@ public interface WeatherApi {
             @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
     })
     @DeleteMapping
-    ResponseEntity<Void> deleteTemperature(@RequestParam double latitude, @RequestParam double longitude);
+    ResponseEntity<Void> deleteTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
 }

@@ -38,6 +38,7 @@ public class WeatherUseCaseImpl implements WeatherUseCase {
         data.setTimestamp(LocalDateTime.now());
 
         kafkaProducerService.sendMessage(data);
+        
         return mongoWeatherRepository.save(data);
     }
 
