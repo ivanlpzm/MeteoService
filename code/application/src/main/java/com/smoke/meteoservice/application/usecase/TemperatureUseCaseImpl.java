@@ -3,20 +3,20 @@ package com.smoke.meteoservice.application.usecase;
 import com.smoke.meteoservice.domain.model.data.TemperatureData;
 import com.smoke.meteoservice.domain.model.kafka.KafkaTemperatureMessage;
 import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
-import com.smoke.meteoservice.domain.port.in.WeatherUseCase;
+import com.smoke.meteoservice.domain.port.in.TemperatureUseCase;
 import com.smoke.meteoservice.domain.port.out.api.OpenMeteoApi;
 import com.smoke.meteoservice.domain.port.out.kafka.KafkaProducerService;
 import com.smoke.meteoservice.domain.port.out.repository.MongoWeatherRepository;
 import org.springframework.stereotype.Service;
 
 @Service
-public class WeatherUseCaseImpl implements WeatherUseCase {
+public class TemperatureUseCaseImpl implements TemperatureUseCase {
 
     private final MongoWeatherRepository mongoWeatherRepository;
     private final OpenMeteoApi openMeteoApi;
     private final KafkaProducerService kafkaProducerService;
 
-    public WeatherUseCaseImpl(MongoWeatherRepository mongoWeatherRepository, OpenMeteoApi openMeteoApi, KafkaProducerService kafkaProducerService) {
+    public TemperatureUseCaseImpl(MongoWeatherRepository mongoWeatherRepository, OpenMeteoApi openMeteoApi, KafkaProducerService kafkaProducerService) {
         this.mongoWeatherRepository = mongoWeatherRepository;
         this.openMeteoApi = openMeteoApi;
         this.kafkaProducerService = kafkaProducerService;

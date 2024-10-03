@@ -44,6 +44,7 @@ services:
     depends_on:
       - kafka
 
+  # Meteoservice application
   meteoservice:
     build: .  # Build the meteoservice from the current directory (must contain a Dockerfile)
     depends_on:
@@ -62,7 +63,7 @@ services:
       - kafka
     volumes:
       - ./SpringBootConsumer-0.0.1-SNAPSHOT.jar:/app/SpringBootConsumer-0.0.1-SNAPSHOT.jar  # Mount the JAR into the container
-    entrypoint: ["java", "-jar", "/app/SpringBootConsumer-0.0.1-SNAPSHOT.jar", "-Dspring.kafka.bootstrap-servers=kafka:9092"]
+    entrypoint: [ "java", "-jar", "/app/SpringBootConsumer-0.0.1-SNAPSHOT.jar", "-Dspring.kafka.bootstrap-servers=kafka:9092" ]
     environment:
       - KAFKA_BROKER=kafka:9092
 
