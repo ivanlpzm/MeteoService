@@ -1,6 +1,6 @@
 
 package com.smoke.meteoservice.domain.port.out.api;
 
-public interface OpenMeteoApi {
+public interface OpenMeteoRestClient {
     double fetchTemperature(double latitude, double longitude);
 }

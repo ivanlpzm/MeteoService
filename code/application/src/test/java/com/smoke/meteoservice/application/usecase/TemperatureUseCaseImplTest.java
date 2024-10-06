@@ -3,7 +3,7 @@ package com.smoke.meteoservice.application.usecase;
 import com.smoke.meteoservice.domain.model.data.TemperatureData;
 import com.smoke.meteoservice.domain.model.kafka.KafkaTemperatureMessage;
 import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
-import com.smoke.meteoservice.domain.port.out.api.OpenMeteoApi;
+import com.smoke.meteoservice.domain.port.out.api.OpenMeteoRestClient;
 import com.smoke.meteoservice.domain.port.out.kafka.KafkaProducerService;
 import com.smoke.meteoservice.domain.port.out.repository.MongoWeatherRepository;
 import org.junit.jupiter.api.BeforeEach;
@@ -29,7 +29,7 @@ class TemperatureUseCaseImplTest {
     private MongoWeatherRepository mongoWeatherRepository;
 
     @Mock
-    private OpenMeteoApi openMeteoApi;
+    private OpenMeteoRestClient openMeteoRestClient;
 
     @Mock
     private KafkaProducerService kafkaProducerService;
@@ -58,7 +58,7 @@ class TemperatureUseCaseImplTest {
         assertEquals(TEMPERATURE, result.getTemperature());
         verify(mongoWeatherRepository, times(1)).findByLatitudeAndLongitude(LATITUDE, LONGITUDE);
         verify(kafkaProducerService, times(1)).sendMessage(any(KafkaTemperatureMessage.class));
-        verify(openMeteoApi, never()).fetchTemperature(anyDouble(), anyDouble());
+        verify(openMeteoRestClient, never()).fetchTemperature(anyDouble(), anyDouble());
     }
 
     @Test
@@ -66,7 +66,7 @@ class TemperatureUseCaseImplTest {
     void getTemperature_shouldFetchAndSaveTemperatureIfNotFound() {
         when(mongoWeatherRepository.findByLatitudeAndLongitude(LATITUDE, LONGITUDE))
                 .thenReturn(Optional.empty());
-        when(openMeteoApi.fetchTemperature(LATITUDE, LONGITUDE)).thenReturn(TEMPERATURE);
+        when(openMeteoRestClient.fetchTemperature(LATITUDE, LONGITUDE)).thenReturn(TEMPERATURE);
         when(mongoWeatherRepository.save(any(TemperatureData.class))).thenReturn(testData);
 
         TemperatureResponse result = weatherUseCase.getTemperature(LATITUDE, LONGITUDE);
@@ -75,7 +75,7 @@ class TemperatureUseCaseImplTest {
         assertEquals(LONGITUDE, result.getLongitude());
         assertEquals(TEMPERATURE, result.getTemperature());
         verify(mongoWeatherRepository, times(1)).findByLatitudeAndLongitude(LATITUDE, LONGITUDE);
-        verify(openMeteoApi, times(1)).fetchTemperature(LATITUDE, LONGITUDE);
+        verify(openMeteoRestClient, times(1)).fetchTemperature(LATITUDE, LONGITUDE);
         verify(mongoWeatherRepository, times(1)).save(any(TemperatureData.class));
         verify(kafkaProducerService, times(1)).sendMessage(any(KafkaTemperatureMessage.class));
     }
