@@ -1,12 +1,14 @@
 package com.smoke.meteoservice.infrastructure.api;
 
-import com.smoke.meteoservice.domain.port.out.api.OpenMeteoApi;
+import com.smoke.meteoservice.domain.port.out.api.OpenMeteoRestClient;
+import com.smoke.meteoservice.infrastructure.exception.OpenMeteoApiException;
 import lombok.extern.slf4j.Slf4j;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
 import okhttp3.Response;
 import okhttp3.logging.HttpLoggingInterceptor;
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -15,7 +17,7 @@ import java.io.IOException;
 
 @Component
 @Slf4j
-public class OpenMeteoApiImpl implements OpenMeteoApi {
+public class OpenMeteoRestClientImpl implements OpenMeteoRestClient {
 
     public static final String CURRENT_WEATHER = "current_weather";
     public static final String TEMPERATURE = "temperature";
@@ -25,12 +27,17 @@ public class OpenMeteoApiImpl implements OpenMeteoApi {
 
     private final OkHttpClient client;
 
-    public OpenMeteoApiImpl() {
+    public OpenMeteoRestClientImpl() {
         this.client = createHttpClient();
     }
 
+    protected OpenMeteoRestClientImpl(OkHttpClient client, String apiUrl) {
+        this.client = client != null ? client : createHttpClient();
+        this.apiUrl = apiUrl;
+    }
+
     private OkHttpClient createHttpClient() {
-        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(log::info);
+        HttpLoggingInterceptor loggingInterceptor = new HttpLoggingInterceptor(log::debug);
         loggingInterceptor.setLevel(HttpLoggingInterceptor.Level.BODY);
         return new OkHttpClient.Builder()
                 .addInterceptor(loggingInterceptor)
@@ -46,7 +53,7 @@ public class OpenMeteoApiImpl implements OpenMeteoApi {
             return extractTemperature(responseBody);
         } catch (IOException e) {
             log.error("Error while fetching temperature from OpenMeteo API", e);
-            throw new RuntimeException("API call failed", e);
+            throw new OpenMeteoApiException("API call failed", e);
         }
     }
 
@@ -61,7 +68,7 @@ public class OpenMeteoApiImpl implements OpenMeteoApi {
 
     private void validateResponse(Response response) throws IOException {
         if (!response.isSuccessful()) {
-            throw new IOException("Unexpected code: " + response);
+            throw new IOException("Unexpected response code: " + response.code() + " with message: " + response.message());
         }
     }
 
@@ -69,21 +76,34 @@ public class OpenMeteoApiImpl implements OpenMeteoApi {
         if (response.body() == null) {
             throw new IOException("Response body is null");
         }
-        return response.body().string();
+        String bodyContent = response.body().string();
+        if (bodyContent.isEmpty()) {
+            throw new IOException("Response body is empty");
+        }
+        return bodyContent;
     }
 
-    private double extractTemperature(String responseBody) {
+    private double extractTemperature(String responseBody) throws IOException {
         JSONObject jsonObject = parseResponse(responseBody);
-        JSONObject currentTemperature = jsonObject.getJSONObject(CURRENT_WEATHER);
+        JSONObject currentTemperature;
+        try {
+            currentTemperature = jsonObject.getJSONObject(CURRENT_WEATHER);
+        } catch (JSONException e) {
+            throw new IOException("Failed to parse 'current_weather' JSON object", e);
+        }
         return currentTemperature.getDouble(TEMPERATURE);
     }
 
-    private JSONObject parseResponse(String responseBody) {
-        if (responseBody.startsWith("[")) {
-            JSONArray jsonArray = new JSONArray(responseBody);
-            return jsonArray.getJSONObject(0);
-        } else {
-            return new JSONObject(responseBody);
+    private JSONObject parseResponse(String responseBody) throws IOException {
+        try {
+            if (responseBody.startsWith("[")) {
+                JSONArray jsonArray = new JSONArray(responseBody);
+                return jsonArray.getJSONObject(0);
+            } else {
+                return new JSONObject(responseBody);
+            }
+        } catch (JSONException e) {
+            throw new IOException("Malformed JSON response", e);
         }
     }
 }
