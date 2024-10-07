@@ -18,17 +18,17 @@
         <dependency>
             <groupId>com.smoke.meteoservice</groupId>
             <artifactId>application</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.smoke.meteoservice</groupId>
             <artifactId>infrastructure</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>com.smoke.meteoservice</groupId>
             <artifactId>adapter</artifactId>
-            <version>${parent.version}</version>
+            <version>${project.parent.version}</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>
