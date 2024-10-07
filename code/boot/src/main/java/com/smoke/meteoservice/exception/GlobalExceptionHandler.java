@@ -1,6 +1,7 @@
 package com.smoke.meteoservice.exception;
 
 import com.smoke.meteoservice.domain.model.response.ErrorResponse;
+import com.smoke.meteoservice.infrastructure.exception.OpenMeteoApiException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -29,8 +30,8 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(RuntimeException.class)
-    public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
+    @ExceptionHandler(OpenMeteoApiException.class)
+    public ResponseEntity<ErrorResponse> handleInternalServerError(OpenMeteoApiException ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put(ERROR, ex.getMessage());
         return buildErrorResponse(ERROR_MESSAGE_INTERNAL_SERVER, errors, HttpStatus.INTERNAL_SERVER_ERROR);

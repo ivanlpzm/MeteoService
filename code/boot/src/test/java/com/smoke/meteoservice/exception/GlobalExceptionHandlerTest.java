@@ -1,6 +1,7 @@
 package com.smoke.meteoservice.exception;
 
 import com.smoke.meteoservice.domain.model.response.ErrorResponse;
+import com.smoke.meteoservice.infrastructure.exception.OpenMeteoApiException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -44,7 +45,7 @@ class GlobalExceptionHandlerTest {
     @Test
     @DisplayName("Should return 500 INTERNAL_SERVER_ERROR for generic exceptions")
     void handleInternalServerError_shouldReturnInternalServerError() {
-        Exception ex = new Exception("Unexpected error");
+        OpenMeteoApiException ex = new OpenMeteoApiException("Unexpected error");
 
         ResponseEntity<ErrorResponse> response = globalExceptionHandler.handleInternalServerError(ex);
 

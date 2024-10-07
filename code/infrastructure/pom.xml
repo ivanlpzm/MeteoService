@@ -18,7 +18,7 @@
         <dependency>
             <groupId>com.smoke.meteoservice</groupId>
             <artifactId>domain</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
+            <version>${parent.version}</version>
         </dependency>
 
         <!-- Spring Boot Starter Data MongoDB for database interactions -->
