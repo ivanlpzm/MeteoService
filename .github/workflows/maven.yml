@@ -37,5 +37,5 @@ jobs:
         uses: actions/upload-artifact@v4.4.1
         with:
           name: maven-build-artifacts
-          path: code/target/*.jar
+          path: code/boot/target/*.jar
           if-no-files-found: error
