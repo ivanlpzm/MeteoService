@@ -54,7 +54,7 @@ class OpenMeteoRestClientImplTest {
     @Test
     @DisplayName("Should throw IOException when response body is empty")
     void fetchTemperature_shouldThrowIOExceptionWhenResponseBodyIsEmpty() throws RuntimeException, IOException {
-        mockClient = mockHttpClient(200, "");  // Empty body
+        mockClient = mockHttpClient(200, "");
         openMeteoApi = new OpenMeteoRestClientImpl(mockClient, API_URL);
 
         OpenMeteoApiException exception = assertThrows(OpenMeteoApiException.class, () -> openMeteoApi.fetchTemperature(40.0, -3.0));

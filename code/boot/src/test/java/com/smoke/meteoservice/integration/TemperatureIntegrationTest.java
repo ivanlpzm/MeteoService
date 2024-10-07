@@ -15,6 +15,7 @@ import static com.github.tomakehurst.wiremock.client.WireMock.*;
 import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.DEFINED_PORT;
 
 @SpringBootTest(webEnvironment = DEFINED_PORT)
+@ActiveProfiles("test")
 class TemperatureIntegrationTest {
 
     private static MongoDBContainer mongoDBContainer;
