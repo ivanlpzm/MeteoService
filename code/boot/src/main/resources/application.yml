@@ -3,11 +3,14 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017/meteoservice
   kafka:
-    bootstrap-servers: kafka:9092
+    bootstrap-servers: kafka:29092
 server:
   port: 8080
 kafka:
   topic: my-Topic
+  consumer:
+    group-id: my-group-id
+    client-id: consumer-my-group-id-1
 # Open Meteo API configuration
 openmeteo:
   api:

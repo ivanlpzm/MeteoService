@@ -24,7 +24,7 @@ public interface TemperatureApi {
     @Operation(summary = "Get temperature by latitude and longitude", description = "Fetches the current temperature data for the given coordinates.")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "Successfully retrieved temperature data",
-                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TemperatureResponse.class))}),
+                    content = {@Content(mediaType = "application/jinson", schema = @Schema(implementation = TemperatureResponse.class))}),
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
     })

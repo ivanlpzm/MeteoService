@@ -21,7 +21,6 @@ public class GlobalExceptionHandler {
     private static final String ERROR_MESSAGE_NOT_FOUND = "The resource you are looking for was not found.";
     private static final String ERROR_MESSAGE_INTERNAL_SERVER = "An unexpected error occurred. Please try again later.";
     private static final String ERROR_MESSAGE_VALIDATION_FAILED = "Validation failed for constraint violations.";
-    private static final String ERROR_RATE_LIMIT = "Too many requests. Please try again later.";
 
     @ResponseStatus(HttpStatus.NOT_FOUND)
     @ExceptionHandler(NoHandlerFoundException.class)
@@ -30,7 +29,7 @@ public class GlobalExceptionHandler {
     }
 
     @ResponseStatus(HttpStatus.INTERNAL_SERVER_ERROR)
-    @ExceptionHandler(Exception.class)
+    @ExceptionHandler(RuntimeException.class)
     public ResponseEntity<ErrorResponse> handleInternalServerError(Exception ex) {
         Map<String, String> errors = new HashMap<>();
         errors.put(ERROR, ex.getMessage());
