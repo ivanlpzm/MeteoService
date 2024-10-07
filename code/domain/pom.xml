@@ -15,7 +15,6 @@
     <description>Domain layer for MeteoService</description>
 
     <dependencies>
-        <!-- Lombok (optional) to reduce boilerplate code in domain models) -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-mongodb</artifactId>

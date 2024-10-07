@@ -1,15 +1,14 @@
 package com.smoke.meteoservice.adapter.in.api;
 
-import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
 import com.smoke.meteoservice.adapter.in.validator.ValidLatitude;
 import com.smoke.meteoservice.adapter.in.validator.ValidLongitude;
+import com.smoke.meteoservice.domain.model.response.TemperatureResponse;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import io.github.resilience4j.ratelimiter.annotation.RateLimiter;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -29,7 +28,6 @@ public interface TemperatureApi {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
     })
-    @RateLimiter(name = "temperatureController")
     @GetMapping
     ResponseEntity<TemperatureResponse> getTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
 
@@ -39,7 +37,6 @@ public interface TemperatureApi {
             @ApiResponse(responseCode = "400", description = "Invalid input"),
             @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
     })
-    @RateLimiter(name = "temperatureController")
     @DeleteMapping
     ResponseEntity<Void> deleteTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
 }

@@ -7,6 +7,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.jetbrains.annotations.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.kafka.support.SendResult;
 import org.springframework.stereotype.Service;
@@ -25,8 +26,17 @@ public class KafkaProducerImpl implements KafkaProducerService {
     @Autowired
     private ObjectMapper objectMapper;
 
+    @Value("${spring.kafka.enabled:true}") 
+    private boolean kafkaEnabled;
+
     @Override
     public void sendMessage(Object message) {
+
+        if (!kafkaEnabled) {
+            log.warn("Kafka is disabled, skipping message send.");
+            return;
+        }
+
         try {
             String jsonMessage = convertToJson(message);
             log.debug("Sending message: {}", jsonMessage);
