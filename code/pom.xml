@@ -29,7 +29,7 @@
         <swagger.annotations.version>2.2.23</swagger.annotations.version>
         <karate.version>1.4.0</karate.version>
         <testcontainers.version>1.19.0</testcontainers.version>
-        <wiremock.version>2.32.0</wiremock.version>
+        <wiremock.version>2.35.1</wiremock.version>
     </properties>
 
     <modules>
