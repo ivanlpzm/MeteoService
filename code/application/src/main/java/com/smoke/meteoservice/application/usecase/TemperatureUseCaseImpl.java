@@ -7,20 +7,16 @@ import com.smoke.meteoservice.domain.port.in.TemperatureUseCase;
 import com.smoke.meteoservice.domain.port.out.api.OpenMeteoRestClient;
 import com.smoke.meteoservice.domain.port.out.kafka.KafkaProducerService;
 import com.smoke.meteoservice.domain.port.out.repository.MongoWeatherRepository;
+import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@AllArgsConstructor
 public class TemperatureUseCaseImpl implements TemperatureUseCase {
 
     private final MongoWeatherRepository mongoWeatherRepository;
     private final OpenMeteoRestClient openMeteoRestClient;
     private final KafkaProducerService kafkaProducerService;
-
-    public TemperatureUseCaseImpl(MongoWeatherRepository mongoWeatherRepository, OpenMeteoRestClient openMeteoRestClient, KafkaProducerService kafkaProducerService) {
-        this.mongoWeatherRepository = mongoWeatherRepository;
-        this.openMeteoRestClient = openMeteoRestClient;
-        this.kafkaProducerService = kafkaProducerService;
-    }
 
     @Override
     public TemperatureResponse getTemperature(double latitude, double longitude) {
@@ -36,6 +32,24 @@ public class TemperatureUseCaseImpl implements TemperatureUseCase {
         mongoWeatherRepository.findByLatitudeAndLongitude(latitude, longitude)
                 .ifPresent(mongoWeatherRepository::delete);
     }
+
+    @Override
+    public TemperatureResponse updateTemperature(double latitude, double longitude) {
+        TemperatureData updated = mongoWeatherRepository.findByLatitudeAndLongitude(latitude, longitude)
+                .map(existing -> refreshExistingTemperature(existing, latitude, longitude))
+                .orElseGet(() -> fetchAndSaveTemperature(latitude, longitude));
+
+        sendWeatherMessageToKafka(updated);
+        return new TemperatureResponse(updated.getLatitude(), updated.getLongitude(), updated.getTemperature());
+    }
+
+    private TemperatureData refreshExistingTemperature(TemperatureData existing, double latitude, double longitude) {
+        double newTemp = openMeteoRestClient.fetchTemperature(latitude, longitude);
+        existing.setTemperature(newTemp);
+        existing.setTimestamp(java.time.LocalDateTime.now());
+        return mongoWeatherRepository.save(existing);
+    }
+
 
     private TemperatureData fetchAndSaveTemperature(double latitude, double longitude) {
         double temperature = openMeteoRestClient.fetchTemperature(latitude, longitude);
