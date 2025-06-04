@@ -19,3 +19,10 @@ Feature: Temperature Integration Test
     Then status 400
     And match response contains {"timestamp": "#notnull","message": "#string","errors": {"getTemperature.latitude": "#string","getTemperature.longitude": "#string"}}
 
+  Scenario: Update temperature data for a location
+    Given path 'temperature'
+    And param latitude = 35.6895
+    And param longitude = 139.6917
+    When method PUT
+    Then status 200
+    And match response contains {"temperature": "#notnull","longitude": "#notnull","latitude": "#notnull"}
