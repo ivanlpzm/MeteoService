@@ -55,4 +55,18 @@ class TemperatureControllerTest {
         assertEquals(HttpStatus.NO_CONTENT, response.getStatusCode());
         verify(temperatureUseCase, times(1)).deleteTemperature(LATITUDE, LONGITUDE);
     }
+
+
+    @Test
+    @DisplayName("Should update temperature data successfully")
+    void updateTemperature_shouldReturnUpdatedData() {
+        TemperatureResponse mockResponse = new TemperatureResponse(LATITUDE, LONGITUDE, 20.0);
+        when(temperatureUseCase.updateTemperature(anyDouble(), anyDouble())).thenReturn(mockResponse);
+
+        ResponseEntity<TemperatureResponse> response = temperatureController.updateTemperature(LATITUDE, LONGITUDE);
+
+        assertEquals(HttpStatus.OK, response.getStatusCode());
+        assertEquals(mockResponse, response.getBody());
+        verify(temperatureUseCase, times(1)).updateTemperature(LATITUDE, LONGITUDE);
+    }
 }

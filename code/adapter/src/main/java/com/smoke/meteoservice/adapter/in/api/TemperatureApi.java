@@ -13,6 +13,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -39,4 +40,15 @@ public interface TemperatureApi {
     })
     @DeleteMapping
     ResponseEntity<Void> deleteTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
+
+
+    @Operation(summary = "Update temperature data", description = "Fetches the latest temperature and updates the stored value for the given coordinates.")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "Successfully updated temperature data",
+                    content = {@Content(mediaType = "application/json", schema = @Schema(implementation = TemperatureResponse.class))}),
+            @ApiResponse(responseCode = "400", description = "Invalid input"),
+            @ApiResponse(responseCode = "404", description = "Temperature data not found for the given coordinates")
+    })
+    @PutMapping
+    ResponseEntity<TemperatureResponse> updateTemperature(@ValidLatitude @RequestParam double latitude, @ValidLongitude @RequestParam double longitude);
 }

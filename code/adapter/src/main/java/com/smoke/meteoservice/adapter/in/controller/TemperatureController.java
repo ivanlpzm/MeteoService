@@ -29,4 +29,11 @@ public class TemperatureController implements TemperatureApi {
         temperatureUseCase.deleteTemperature(latitude, longitude);
         return ResponseEntity.noContent().build();
     }
+
+    @Override
+    public ResponseEntity<TemperatureResponse> updateTemperature(double latitude, double longitude) {
+        log.info("Updating temperature data for latitude {} and longitude {}", latitude, longitude);
+        TemperatureResponse response = temperatureUseCase.updateTemperature(latitude, longitude);
+        return new ResponseEntity<>(response, HttpStatus.OK);
+    }
 }
